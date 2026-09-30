@@ -123,7 +123,7 @@ def test_signature_strips_query_string_before_signing():
     assert f"signature={expected_sig}" in auth
     # And the actual request must still carry the query
     assert "limit=10" in captured[0]["url"]
-    assert "active=True" in captured[0]["url"]
+    assert "active=true" in captured[0]["url"]  # the server reads "true"
 
 
 def test_idempotency_key_is_included_in_signing_and_header():
@@ -202,7 +202,7 @@ def test_discount_codes_list_path():
     url = captured[0]["url"]
     assert "/api/v1/discount-codes" in url
     assert "limit=20" in url
-    assert "active=True" in url
+    assert "active=true" in url  # the server reads "true"
 
 
 def test_discount_codes_create_post_body():

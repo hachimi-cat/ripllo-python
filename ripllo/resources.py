@@ -23,7 +23,11 @@ def _qs(params: Dict[str, Any]) -> str:
     filtered = {k: v for k, v in params.items() if v is not None}
     if not filtered:
         return ""
-    return "?" + urlencode({k: str(v) for k, v in filtered.items()})
+    # true/false as the server reads them (str(True) is "True": a Catent proof found
+    # ?active=True ignored, so an "active only" list returned inactive codes too)
+    return "?" + urlencode(
+        {k: (str(v).lower() if isinstance(v, bool) else str(v)) for k, v in filtered.items()}
+    )
 
 
 class _Namespace:

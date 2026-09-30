@@ -53,3 +53,13 @@ def test_a_required_field_is_asked_for() -> None:
 def test_every_feature_route_has_a_method() -> None:
     methods = [n for n in dir(_client([]).api) if not n.startswith("_")]
     assert len(methods) > 200
+
+
+def test_a_boolean_query_is_sent_as_the_server_reads_it() -> None:
+    """A Catent proof found ?active=True ignored by Ripllo (it reads 'true')."""
+    seen: List[httpx.Request] = []
+    client = _client(seen)
+    client.discount_codes.list(active=True)
+    client.api.discount_codes_list(active=False)
+    assert parse_qs(urlsplit(str(seen[0].url)).query)["active"] == ["true"]
+    assert parse_qs(urlsplit(str(seen[1].url)).query)["active"] == ["false"]
