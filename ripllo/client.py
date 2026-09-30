@@ -94,6 +94,10 @@ class RiplloClient:
 
         # Resource namespaces (lazy-mounted to keep client.py readable)
         resources = build_resources(self)
+        # Every feature route, one method each (generated from the API spec).
+        from .api_generated import GeneratedApi
+
+        self.api = GeneratedApi(self)
         self.discount_codes = resources["discount_codes"]
         self.pixels = resources["pixels"]
         self.feeds = resources["feeds"]
@@ -255,6 +259,23 @@ class RiplloClient:
         return envelope.get("data") if isinstance(envelope, dict) else envelope
 
     # ─── Generic passthrough ─────────────────────────────────────
+
+    def _apigen_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        query: Optional[Mapping[str, Any]] = None,
+        body: Any = None,
+    ) -> Any:
+        """The call behind ``client.api.*`` (api_generated.py): signed like every other
+        request, with an idempotency key on writes."""
+        return self.request(
+            method=method,
+            path=path + _qs(query or {}),
+            body=body,
+            idempotency_key=None if method.upper() == "GET" else self._gen_idem(),
+        )
 
     def passthrough(
         self,
