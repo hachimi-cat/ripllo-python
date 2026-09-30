@@ -46,4 +46,4 @@ __all__ = [
     "verify_webhook",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.1.3"

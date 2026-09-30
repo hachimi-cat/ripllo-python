@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 
 
 class GeneratedApi:
-    """All 212 feature routes of the Ripllo API."""
+    """All 208 feature routes of the Ripllo API."""
 
     def __init__(self, client: Any) -> None:
         self._client = client
@@ -1424,6 +1424,10 @@ class GeneratedApi:
             payload["active"] = active
         return self._call("PUT", f"/api/v1/integrations/email", {}, payload)
 
+    def integrations_status(self) -> Any:
+        """List status (GET /api/v1/integrations/status)."""
+        return self._call("GET", f"/api/v1/integrations/status", {}, None)
+
     def kyc_create(self, *, id_type: Optional[str] = None, id_number: Optional[str] = None, id_image_key: Optional[str] = None, selfie_image_key: Optional[str] = None, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Create a kyc (POST /api/v1/kyc).
         
@@ -2008,11 +2012,6 @@ class GeneratedApi:
         """List stats (GET /api/v1/referrals/stats)."""
         return self._call("GET", f"/api/v1/referrals/stats", {}, None)
 
-    def referrals_sweeps_expire_pending(self, *, json_body: Optional[Dict[str, Any]] = None) -> Any:
-        """Cross-tenant maintenance: expires pending attributions for EVERY workspace, so it is platform-admin only rather than merchant-scoped. (POST /api/v1/referrals/sweeps/expire-pending)."""
-        payload: Dict[str, Any] = dict(json_body or {})
-        return self._call("POST", f"/api/v1/referrals/sweeps/expire-pending", {}, payload)
-
     def uploads_avatar(self, *, key: Optional[Any] = None) -> Any:
         """List avatar (GET /api/v1/uploads/avatar)."""
         return self._call("GET", f"/api/v1/uploads/avatar", {"key": key}, None)
@@ -2102,10 +2101,6 @@ class GeneratedApi:
             raise ValueError("webhooks_create_endpoints needs url")
         return self._call("POST", f"/api/v1/webhooks/endpoints", {}, payload)
 
-    def webhooks_create_engagement_whatsapp(self) -> Any:
-        """Create a whatsapp (POST /api/v1/webhooks/engagement/whatsapp)."""
-        return self._call("POST", f"/api/v1/webhooks/engagement/whatsapp", {}, None)
-
     def webhooks_delete_endpoints(self, id_: str) -> Any:
         """Delete an endpoint (DELETE /api/v1/webhooks/endpoints/{id})."""
         return self._call("DELETE", f"/api/v1/webhooks/endpoints/{_q(id_)}", {}, None)
@@ -2113,19 +2108,6 @@ class GeneratedApi:
     def webhooks_endpoints(self) -> Any:
         """List endpoints (GET /api/v1/webhooks/endpoints)."""
         return self._call("GET", f"/api/v1/webhooks/endpoints", {}, None)
-
-    def webhooks_engagement_resend(self, *, json_body: Optional[Dict[str, Any]] = None) -> Any:
-        """Create a resend (POST /api/v1/webhooks/engagement/resend)."""
-        payload: Dict[str, Any] = dict(json_body or {})
-        return self._call("POST", f"/api/v1/webhooks/engagement/resend", {}, payload)
-
-    def webhooks_engagement_sendgrid(self) -> Any:
-        """Create a sendgrid (POST /api/v1/webhooks/engagement/sendgrid)."""
-        return self._call("POST", f"/api/v1/webhooks/engagement/sendgrid", {}, None)
-
-    def webhooks_engagement_whatsapp(self, *, hub_challenge: Optional[Any] = None, hub_verify_token: Optional[Any] = None) -> Any:
-        """List whatsapp (GET /api/v1/webhooks/engagement/whatsapp)."""
-        return self._call("GET", f"/api/v1/webhooks/engagement/whatsapp", {"hub.challenge": hub_challenge, "hub.verify_token": hub_verify_token}, None)
 
     def webhooks_events(self, *, cursor: Optional[Any] = None, limit: Optional[Any] = None, type_: Optional[Any] = None) -> Any:
         """The three SDKs (`listEvents({ limit, cursor, type })` in node, python and go) and the dashboard call site have promised these params since they shipped; the server took none of them — a fixed `take: 5 (GET /api/v1/webhooks/events)."""
