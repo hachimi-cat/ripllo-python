@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 
 
 class GeneratedApi:
-    """All 208 feature routes of the Ripllo API."""
+    """All 207 feature routes of the Ripllo API."""
 
     def __init__(self, client: Any) -> None:
         self._client = client
@@ -112,10 +112,6 @@ class GeneratedApi:
         """The merchant-facing surface for opted-out buyers. (GET /api/v1/abandoned-cart/suppressions)."""
         return self._call("GET", f"/api/v1/abandoned-cart/suppressions", {"limit": limit}, None)
 
-    def abandoned_cart_unsubscribe(self, *, account_id: Optional[Any] = None, email: Optional[Any] = None, token: Optional[Any] = None) -> Any:
-        """List unsubscribe (GET /api/v1/abandoned-cart/unsubscribe)."""
-        return self._call("GET", f"/api/v1/abandoned-cart/unsubscribe", {"accountId": account_id, "email": email, "token": token}, None)
-
     def abandoned_cart_update_config(self, *, enabled: Optional[bool] = None, delay_hours: Optional[int] = None, email_subject: Optional[str] = None, email_preview: Optional[str] = None, discount_code_id: Optional[str] = None, marketing_campaign_id: Optional[str] = None, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Update config (PATCH /api/v1/abandoned-cart/config).
         
@@ -139,9 +135,13 @@ class GeneratedApi:
         """List affiliators (GET /api/v1/affiliates/affiliators)."""
         return self._call("GET", f"/api/v1/affiliates/affiliators", {"channel": channel, "country": country, "cursor": cursor, "limit": limit}, None)
 
-    def affiliates_affiliators_2(self, handle: str) -> Any:
+    def affiliates_get_affiliators(self, handle: str) -> Any:
         """Get an affiliator (GET /api/v1/affiliates/affiliators/{handle})."""
         return self._call("GET", f"/api/v1/affiliates/affiliators/{_q(handle)}", {}, None)
+
+    def affiliates_get_programs(self, id_: str) -> Any:
+        """Get a program (GET /api/v1/affiliates/programs/{id})."""
+        return self._call("GET", f"/api/v1/affiliates/programs/{_q(id_)}", {}, None)
 
     def affiliates_me_commissions(self, *, limit: Optional[Any] = None, status: Optional[Any] = None) -> Any:
         """List commissions (GET /api/v1/affiliates/me/commissions)."""
@@ -154,10 +154,6 @@ class GeneratedApi:
     def affiliates_programs(self, *, cursor: Optional[Any] = None, limit: Optional[Any] = None) -> Any:
         """List programs (GET /api/v1/affiliates/programs)."""
         return self._call("GET", f"/api/v1/affiliates/programs", {"cursor": cursor, "limit": limit}, None)
-
-    def affiliates_programs_2(self, id_: str) -> Any:
-        """Get a program (GET /api/v1/affiliates/programs/{id})."""
-        return self._call("GET", f"/api/v1/affiliates/programs/{_q(id_)}", {}, None)
 
     def affiliates_programs_enroll(self, id_: str, *, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Enroll a program (POST /api/v1/affiliates/programs/{id}/enroll)."""
@@ -389,17 +385,17 @@ class GeneratedApi:
         """Get a blog (GET /api/v1/blog/{id})."""
         return self._call("GET", f"/api/v1/blog/{_q(id_)}", {}, None)
 
-    def blog_list(self, *, status: Optional[Any] = None) -> Any:
-        """List blog (GET /api/v1/blog)."""
-        return self._call("GET", f"/api/v1/blog", {"status": status}, None)
-
-    def blog_public(self, account_id: str) -> Any:
+    def blog_get_public(self, account_id: str) -> Any:
         """Public storefront read — list published posts. (GET /api/v1/blog/public/{accountId})."""
         return self._call("GET", f"/api/v1/blog/public/{_q(account_id)}", {}, None)
 
-    def blog_public_2(self, account_id: str, slug: str) -> Any:
+    def blog_get_public_2(self, account_id: str, slug: str) -> Any:
         """Get a public (GET /api/v1/blog/public/{accountId}/{slug})."""
         return self._call("GET", f"/api/v1/blog/public/{_q(account_id)}/{_q(slug)}", {}, None)
+
+    def blog_list(self, *, status: Optional[Any] = None) -> Any:
+        """List blog (GET /api/v1/blog)."""
+        return self._call("GET", f"/api/v1/blog", {"status": status}, None)
 
     def blog_update(self, id_: str, *, slug: Optional[str] = None, title: Optional[str] = None, excerpt: Optional[str] = None, body: Optional[str] = None, cover_image: Optional[str] = None, status: Optional[str] = None, published_at: Optional[str] = None, author_name: Optional[str] = None, tags: Optional[List[Any]] = None, meta_title: Optional[str] = None, meta_description: Optional[str] = None, marketing_campaign_id: Optional[str] = None, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Update a blog (PATCH /api/v1/blog/{id}).
@@ -1054,7 +1050,7 @@ class GeneratedApi:
         payload: Dict[str, Any] = dict(json_body or {})
         return self._call("DELETE", f"/api/v1/creator-stats/connect/{_q(platform)}", {}, payload)
 
-    def creator_stats_connect_callback(self, platform: str, *, code: Optional[Any] = None, state: Optional[Any] = None) -> Any:
+    def creator_stats_connect_callback(self, platform: str, *, code: Any, state: Any) -> Any:
         """List callback (GET /api/v1/creator-stats/connect/{platform}/callback)."""
         return self._call("GET", f"/api/v1/creator-stats/connect/{_q(platform)}/callback", {"code": code, "state": state}, None)
 
@@ -1374,6 +1370,10 @@ class GeneratedApi:
         """Archive an inbox (POST /api/v1/inbox/{id}/archive)."""
         return self._call("POST", f"/api/v1/inbox/{_q(id_)}/archive", {}, None)
 
+    def inbox_get_threads(self, provider: str, handle: str) -> Any:
+        """Get a thread (GET /api/v1/inbox/threads/{provider}/{handle})."""
+        return self._call("GET", f"/api/v1/inbox/threads/{_q(provider)}/{_q(handle)}", {}, None)
+
     def inbox_read(self, id_: str) -> Any:
         """Read an inbox (POST /api/v1/inbox/{id}/read)."""
         return self._call("POST", f"/api/v1/inbox/{_q(id_)}/read", {}, None)
@@ -1381,10 +1381,6 @@ class GeneratedApi:
     def inbox_threads(self) -> Any:
         """List threads (GET /api/v1/inbox/threads)."""
         return self._call("GET", f"/api/v1/inbox/threads", {}, None)
-
-    def inbox_threads_2(self, provider: str, handle: str) -> Any:
-        """Get a thread (GET /api/v1/inbox/threads/{provider}/{handle})."""
-        return self._call("GET", f"/api/v1/inbox/threads/{_q(provider)}/{_q(handle)}", {}, None)
 
     def insights_campaigns(self, id_: str) -> Any:
         """Get a campaign (GET /api/v1/insights/campaigns/{id})."""
@@ -1620,10 +1616,6 @@ class GeneratedApi:
         """List campaigns (GET /api/v1/marketplace/campaigns)."""
         return self._call("GET", f"/api/v1/marketplace/campaigns", {"cursor": cursor, "limit": limit}, None)
 
-    def marketplace_campaigns_2(self, id_: str) -> Any:
-        """Get a campaign (GET /api/v1/marketplace/campaigns/{id})."""
-        return self._call("GET", f"/api/v1/marketplace/campaigns/{_q(id_)}", {}, None)
-
     def marketplace_campaigns_apply(self, id_: str, *, pitch_text: Optional[str] = None, proposed_rate: Optional[int] = None, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Apply a campaign (POST /api/v1/marketplace/campaigns/{id}/apply).
         
@@ -1641,7 +1633,11 @@ class GeneratedApi:
         """List creators (GET /api/v1/marketplace/creators)."""
         return self._call("GET", f"/api/v1/marketplace/creators", {"niche": niche, "country": country, "language": language, "cursor": cursor, "limit": limit}, None)
 
-    def marketplace_creators_2(self, handle: str) -> Any:
+    def marketplace_get_campaigns(self, id_: str) -> Any:
+        """Get a campaign (GET /api/v1/marketplace/campaigns/{id})."""
+        return self._call("GET", f"/api/v1/marketplace/campaigns/{_q(id_)}", {}, None)
+
+    def marketplace_get_creators(self, handle: str) -> Any:
         """Get a creator (GET /api/v1/marketplace/creators/{handle})."""
         return self._call("GET", f"/api/v1/marketplace/creators/{_q(handle)}", {}, None)
 
@@ -2012,11 +2008,11 @@ class GeneratedApi:
         """List stats (GET /api/v1/referrals/stats)."""
         return self._call("GET", f"/api/v1/referrals/stats", {}, None)
 
-    def uploads_avatar(self, *, key: Optional[Any] = None) -> Any:
+    def uploads_avatar(self, *, key: Any) -> Any:
         """List avatar (GET /api/v1/uploads/avatar)."""
         return self._call("GET", f"/api/v1/uploads/avatar", {"key": key}, None)
 
-    def uploads_deliverable(self, *, id_: Optional[Any] = None) -> Any:
+    def uploads_deliverable(self, *, id_: Any) -> Any:
         """Signed-GET for a deliverable asset. (GET /api/v1/uploads/deliverable)."""
         return self._call("GET", f"/api/v1/uploads/deliverable", {"id": id_}, None)
 
@@ -2040,7 +2036,7 @@ class GeneratedApi:
             payload["url"] = url
         return self._call("POST", f"/api/v1/uploads/from-url", {}, payload)
 
-    def uploads_merchant_asset(self, *, key: Optional[Any] = None) -> Any:
+    def uploads_merchant_asset(self, *, key: Any) -> Any:
         """Signed-GET for merchant-owned assets. (GET /api/v1/uploads/merchant-asset)."""
         return self._call("GET", f"/api/v1/uploads/merchant-asset", {"key": key}, None)
 
@@ -2117,6 +2113,34 @@ class GeneratedApi:
         """Update an endpoint (PATCH /api/v1/webhooks/endpoints/{id})."""
         payload: Dict[str, Any] = dict(json_body or {})
         return self._call("PATCH", f"/api/v1/webhooks/endpoints/{_q(id_)}", {}, payload)
+
+    def affiliates_affiliators_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``affiliates_get_affiliators`` (GET /api/v1/affiliates/affiliators/{handle})."""
+        return self.affiliates_get_affiliators(*args, **kwargs)
+
+    def affiliates_programs_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``affiliates_get_programs`` (GET /api/v1/affiliates/programs/{id})."""
+        return self.affiliates_get_programs(*args, **kwargs)
+
+    def blog_public(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``blog_get_public`` (GET /api/v1/blog/public/{accountId})."""
+        return self.blog_get_public(*args, **kwargs)
+
+    def blog_public_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``blog_get_public_2`` (GET /api/v1/blog/public/{accountId}/{slug})."""
+        return self.blog_get_public_2(*args, **kwargs)
+
+    def inbox_threads_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``inbox_get_threads`` (GET /api/v1/inbox/threads/{provider}/{handle})."""
+        return self.inbox_get_threads(*args, **kwargs)
+
+    def marketplace_campaigns_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``marketplace_get_campaigns`` (GET /api/v1/marketplace/campaigns/{id})."""
+        return self.marketplace_get_campaigns(*args, **kwargs)
+
+    def marketplace_creators_2(self, *args: Any, **kwargs: Any) -> Any:
+        """Deprecated: the old name of ``marketplace_get_creators`` (GET /api/v1/marketplace/creators/{handle})."""
+        return self.marketplace_get_creators(*args, **kwargs)
 
 
 def _q(value: Any) -> str:
