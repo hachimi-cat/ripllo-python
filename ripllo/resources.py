@@ -341,11 +341,30 @@ class WebhooksResource(_Namespace):
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
         type: Optional[str] = None,
+        status: Optional[str] = None,
+        endpoint_id: Optional[str] = None,
     ) -> Any:
+        """The delivery log: one row per event per endpoint, newest first, each with
+        its ``deliveryAttempts``. ``status`` is pending, sent or failed."""
         return self.client.request(
             method="GET",
-            path=f"/api/v1/webhooks/events{_qs({'limit': limit, 'cursor': cursor, 'type': type})}",
+            path=f"/api/v1/webhooks/events{_qs({'limit': limit, 'cursor': cursor, 'type': type, 'status': status, 'endpointId': endpoint_id})}",
         )
+
+    def get_event(self, event_id: str) -> Any:
+        """One delivery with every attempt made at it."""
+        return self.client.request(method="GET", path=f"/api/v1/webhooks/events/{quote(event_id, safe='')}")
+
+    def retry_event(self, event_id: str) -> Any:
+        """One more attempt now at a delivery (202, ``pending``); raises with 409 when it
+        is already queued or its endpoint is off."""
+        return self.client.request(
+            method="POST", path=f"/api/v1/webhooks/events/{quote(event_id, safe='')}/retry", body={}
+        )
+
+    def list_event_types(self) -> Any:
+        """Every event type Ripllo emits, with what fires it."""
+        return self.client.request(method="GET", path="/api/v1/webhooks/event-types")
 
 
 # ─── Audit log ──────────────────────────────────────────────────

@@ -553,3 +553,19 @@ def test_webhook_verify_missing_header():
     with pytest.raises(RiplloError) as excinfo:
         verify_webhook(raw_body=b"{}", signature=None, secret="x")
     assert excinfo.value.code == "missing_signature"
+
+
+def test_webhooks_delivery_log_routes():
+    client, captured = _make_client()
+    client.webhooks.list_events(status="failed", endpoint_id="ep1", type="ripllo.contact.created.v1", limit=10)
+    assert captured[0]["path"] == "/api/v1/webhooks/events"
+    for part in ("status=failed", "endpointId=ep1", "limit=10"):
+        assert part in captured[0]["query"]
+    client.webhooks.get_event("ev 1")
+    assert captured[1]["method"] == "GET"
+    assert captured[1]["raw_path"].endswith("/api/v1/webhooks/events/ev%201")
+    client.webhooks.retry_event("ev1")
+    assert captured[2]["method"] == "POST"
+    assert captured[2]["path"] == "/api/v1/webhooks/events/ev1/retry"
+    client.webhooks.list_event_types()
+    assert captured[3]["path"] == "/api/v1/webhooks/event-types"

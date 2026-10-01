@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 
 
 class GeneratedApi:
-    """All 207 feature routes of the Ripllo API."""
+    """All 210 feature routes of the Ripllo API."""
 
     def __init__(self, client: Any) -> None:
         self._client = client
@@ -2105,9 +2105,21 @@ class GeneratedApi:
         """List endpoints (GET /api/v1/webhooks/endpoints)."""
         return self._call("GET", f"/api/v1/webhooks/endpoints", {}, None)
 
-    def webhooks_events(self, *, cursor: Optional[Any] = None, limit: Optional[Any] = None, type_: Optional[Any] = None) -> Any:
-        """The three SDKs (`listEvents({ limit, cursor, type })` in node, python and go) and the dashboard call site have promised these params since they shipped; the server took none of them — a fixed `take: 5 (GET /api/v1/webhooks/events)."""
-        return self._call("GET", f"/api/v1/webhooks/events", {"cursor": cursor, "limit": limit, "type": type_}, None)
+    def webhooks_event_types(self) -> Any:
+        """The event types an endpoint can subscribe to — every type Ripllo emits, with what fires it (lib/events.ts). (GET /api/v1/webhooks/event-types)."""
+        return self._call("GET", f"/api/v1/webhooks/event-types", {}, None)
+
+    def webhooks_events(self, *, cursor: Optional[Any] = None, endpoint_id: Optional[Any] = None, limit: Optional[Any] = None, status: Optional[Any] = None, type_: Optional[Any] = None) -> Any:
+        """List webhook deliveries — one row per event per endpoint, newest first, each with its status (pending, sent, failed), attempt count, next retry and every attempt made (`deliveryAttempts`). (GET /api/v1/webhooks/events)."""
+        return self._call("GET", f"/api/v1/webhooks/events", {"cursor": cursor, "endpointId": endpoint_id, "limit": limit, "status": status, "type": type_}, None)
+
+    def webhooks_events_retry(self, id_: str) -> Any:
+        """Retry a webhook delivery. (POST /api/v1/webhooks/events/{id}/retry)."""
+        return self._call("POST", f"/api/v1/webhooks/events/{_q(id_)}/retry", {}, None)
+
+    def webhooks_get_events(self, id_: str) -> Any:
+        """Get a webhook delivery, with every attempt made at it. (GET /api/v1/webhooks/events/{id})."""
+        return self._call("GET", f"/api/v1/webhooks/events/{_q(id_)}", {}, None)
 
     def webhooks_update_endpoints(self, id_: str, *, json_body: Optional[Dict[str, Any]] = None) -> Any:
         """Update an endpoint (PATCH /api/v1/webhooks/endpoints/{id})."""

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ripllo"
-version = "0.2.0"
+version = "0.3.0"
 description = "Official Python SDK for Ripllo — discounts, referrals, abandoned cart, pixels, feeds, blog + creator marketplace (campaigns, programs, collaborations), marketing (channels, contacts, contact-lists, marketing campaigns, funnels, inbox, audience segments), insights, API keys, audit log, billing, integrations, uploads, profiles (merchant/creator/affiliator), KYC, disputes. Platform-partner mode for Storlaunch (Pattern 2 HMAC partner-billing)."
 readme = "README.md"
 license = { text = "MIT" }
